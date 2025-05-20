@@ -179,6 +179,7 @@ const ManualTestPaymentButton = ({ notReady }: { notReady: boolean }) => {
         onClick={handlePayment}
         size="large"
         data-testid="submit-order-button"
+        className="bg-[#ff6382] hover:bg-[#ff4f72] border-none rounded-none text-white font-twentieth-century text-lg"
       >
         Place order
       </Button>

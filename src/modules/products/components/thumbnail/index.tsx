@@ -11,6 +11,7 @@ type ThumbnailProps = {
   size?: "small" | "medium" | "large" | "full" | "square"
   isFeatured?: boolean
   className?: string
+  percentageDiff?: number
   "data-testid"?: string
 }
 
@@ -20,6 +21,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   size = "small",
   isFeatured,
   className,
+  percentageDiff,
   "data-testid": dataTestid,
 }) => {
   const initialImage = thumbnail || images?.[0]?.url
@@ -27,7 +29,7 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
   return (
     <Container
       className={clx(
-        "relative w-full overflow-hidden p-4 bg-ui-bg-subtle shadow-elevation-card-rest rounded-large group-hover:shadow-elevation-card-hover transition-shadow ease-in-out duration-150",
+        "relative w-full overflow-hidden p-4 shadow-elevation-card-rest  group-hover:shadow-elevation-card-hover transition-shadow ease-in-out duration-150",
         className,
         {
           "aspect-[11/14]": isFeatured,
@@ -41,10 +43,18 @@ const Thumbnail: React.FC<ThumbnailProps> = ({
       )}
       data-testid={dataTestid}
     >
+      {/* Percentage badge */}
+      {percentageDiff !== undefined && (
+        <div className="absolute top-2 right-2 text-white text-xs font-semibold px-2 py-1 z-10 shadow-md bg-[#fe486d]">
+          -{percentageDiff}%
+        </div>
+      )}
+
       <ImageOrPlaceholder image={initialImage} size={size} />
     </Container>
   )
 }
+
 
 const ImageOrPlaceholder = ({
   image,

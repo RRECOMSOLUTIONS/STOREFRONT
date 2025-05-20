@@ -16,6 +16,12 @@ import LocalizedClientLink from "@modules/common/components/localized-client-lin
 import Thumbnail from "@modules/products/components/thumbnail"
 import { usePathname } from "next/navigation"
 import { Fragment, useEffect, useRef, useState } from "react"
+import { FaUser, FaShoppingCart, FaShoppingBag, FaShoppingBasket } from "react-icons/fa"; // Install react-icons if needed
+import { FontAwesomeIcon } from "@fortawesome/react-fontawesome"
+import { faCartShopping, faBagShopping } from "@fortawesome/free-solid-svg-icons"
+import Hamburger from "@modules/common/icons/hamburger"
+import User from "@modules/common/icons/user"
+import ShoppingBagOutline from "@modules/common/icons/bag"
 
 const CartDropdown = ({
   cart: cartState,
@@ -80,13 +86,30 @@ const CartDropdown = ({
       onMouseLeave={close}
     >
       <Popover className="relative h-full">
-        <PopoverButton className="h-full">
+        {/* <PopoverButton className="h-full">
           <LocalizedClientLink
-            className="hover:text-ui-fg-base"
+            className="hover:text-ui-fg-base flex items-center"
             href="/cart"
             data-testid="nav-cart-link"
-          >{`Cart (${totalItems})`}</LocalizedClientLink>
-        </PopoverButton>
+          >
+            <FaShoppingBag className="w-5 h-5 mr-1" />
+            <span className="text-large-regular"> {totalItems}</span>            </LocalizedClientLink>
+        </PopoverButton> */}
+        <PopoverButton className="h-full">
+  <LocalizedClientLink
+    className="hover:text-ui-fg-base flex items-center relative" // Add relative here
+    href="/cart"
+    data-testid="nav-cart-link"
+  >
+    <ShoppingBagOutline size="24" color="currentColor" className="mr-1" />
+
+    {/* Badge */}
+    <div className="absolute -top-2 -right-2 bg-white text-[#ff6382] text-xs w-5 h-5 flex items-center justify-center rounded-full">
+      {totalItems}
+    </div>
+  </LocalizedClientLink>
+</PopoverButton>
+
         <Transition
           show={cartDropdownOpen}
           as={Fragment}
@@ -193,7 +216,8 @@ const CartDropdown = ({
                   </div>
                   <LocalizedClientLink href="/cart" passHref>
                     <Button
-                      className="w-full"
+                      className="w-full bg-[#ff6382] hover:bg-[#ff4f72] border-none rounded-none text-white font-twentieth-century text-lg"
+
                       size="large"
                       data-testid="go-to-cart-button"
                     >
@@ -205,7 +229,7 @@ const CartDropdown = ({
             ) : (
               <div>
                 <div className="flex py-16 flex-col gap-y-4 items-center justify-center">
-                  <div className="bg-gray-900 text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
+                  <div className="bg-[#ff6382] text-small-regular flex items-center justify-center w-6 h-6 rounded-full text-white">
                     <span>0</span>
                   </div>
                   <span>Your shopping bag is empty.</span>
@@ -213,7 +237,9 @@ const CartDropdown = ({
                     <LocalizedClientLink href="/store">
                       <>
                         <span className="sr-only">Go to all products page</span>
-                        <Button onClick={close}>Explore products</Button>
+                        <Button onClick={close}
+                        className="bg-[#ff6382] hover:bg-[#ff4f72] border-none rounded-none text-white font-twentieth-century text-lg"
+                        >Explore products</Button>
                       </>
                     </LocalizedClientLink>
                   </div>
