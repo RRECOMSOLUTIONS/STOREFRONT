@@ -51,7 +51,7 @@ export default async function PaginatedProducts({
 
   const region = await getRegion(countryCode)
 
-  console.log("region", region)
+  // console.log("region", region)
 
   if (!region) {
     return null
@@ -66,7 +66,7 @@ export default async function PaginatedProducts({
     countryCode,
   })
 
-  console.log("products", products)
+  // console.log("products", products)
   const totalPages = Math.ceil(count / PRODUCT_LIMIT)
 
   return (

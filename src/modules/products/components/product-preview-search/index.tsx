@@ -24,13 +24,10 @@ export default function ProductPreview({
   region: HttpTypes.StoreRegion
 }) {
   const { cheapestPrice } = getProductPrice({ product })
-  const router = useRouter()
   const countryCode = useParams().countryCode as string
 
   const [isWishlisted, setIsWishlisted] = useState(false)
-  const [selectedOption, setSelectedOption] = useState<string | undefined>()
   const [isAdding, setIsAdding] = useState(false)
-  const [localQuantities, setLocalQuantities] = useState<Record<string, number>>({})
   const { cart } = useCart()
   const [isSingleVariantInCart, setIsSingleVariantInCart] = useState<boolean>(false)
 
@@ -44,47 +41,6 @@ export default function ProductPreview({
       
 
      
-      
-  const optionTitle = product.options?.[0]?.title
-  const optionId = product.options?.[0]?.id
-
-  const variantsWithSingleOption = useMemo(() => {
-    if (product.options?.length === 1) {
-      return (
-        product.variants
-          ?.filter((variant) => {
-            const inStock =
-              !variant.manage_inventory ||
-              variant.allow_backorder ||
-              (variant.inventory_quantity ?? 0) > 0
-  
-            return inStock
-          })
-          .map((variant) => {
-            const option = variant.options?.find((opt) => opt.option_id === optionId)
-            return option
-              ? {
-                  value: option.value,
-                  label: option.value,
-                  variant,
-                }
-              : null
-          })
-          .filter((v) => !!v) || []
-      )
-    }
-    return []
-  }, [product.variants, product.options, optionId])
-  
-
-  const selectedVariant = useMemo(() => {
-    return variantsWithSingleOption.find(v => v.value === selectedOption)?.variant
-  }, [selectedOption, variantsWithSingleOption])
-
-  const selectedInStock = selectedVariant &&
-    (!selectedVariant.manage_inventory ||
-      selectedVariant.allow_backorder ||
-      (selectedVariant.inventory_quantity ?? 0) > 0)
 
       const cartItem = cart?.items?.find(
         (item) => item.variant_id === singleVariant?.id
@@ -92,18 +48,9 @@ export default function ProductPreview({
       const isInCart = !!cartItem
       const cartQuantity = cartItem?.quantity ?? 0
       
-      const selectedVariantCartItem = cart?.items?.find(
-        (item) => item.variant_id === selectedVariant?.id
-      )
-      const selectedVariantInCart = !!selectedVariantCartItem
-      const selectedVariantQuantity = selectedVariantCartItem?.quantity ?? 0
-
-      const isSelectedVariantInCart =
-  selectedVariant &&
-  (localQuantities[selectedVariant.id] ?? selectedVariantQuantity) > 0
-
-      
-      
+  
+ 
+ 
       const handleAddToCartClick = async (variant: HttpTypes.StoreProductVariant) => {
         const cartItem = cart?.items?.find(item => item.variant_id === variant.id)
         const currentQty = cartItem?.quantity ?? 0
@@ -117,37 +64,7 @@ export default function ProductPreview({
         setIsAdding(false)
         setIsSingleVariantInCart(true) // ✅ update local state immediately
       }
-      
-      const handleToggleVariantInCart = async (variant: HttpTypes.StoreProductVariant) => {
-        const variantId = variant.id
-      
-        const currentQty =
-          localQuantities[variantId] ??
-          cart?.items?.find((item) => item.variant_id === variantId)?.quantity ??
-          0
-      
-          console.log(`before currentQty`, currentQty)
 
-        const newQty = currentQty > 0 ? currentQty - 1 : 1 // decrease if exists, otherwise add
-      
-        setIsAdding(true)
-      
-        console.log(`currentQty`, currentQty)
-        console.log(`newQty`, newQty)
-        const response = await addToCart({
-          variantId,
-          quantity: newQty,
-          countryCode,
-        })
-      
-        console.log(`response`, response)
-        setLocalQuantities((prev) => ({
-          ...prev,
-          [variantId]: newQty,
-        }))
-      
-        setIsAdding(false)
-      }
       
 
   const handleAddToWishlist = () => {
@@ -238,53 +155,6 @@ useEffect(() => {
           </div>
         </div>
 
-
-        {/* Dropdown if multiple variants with a single option */}
-        {variantsWithSingleOption.length > 1 && (
-  <div className="flex items-center mt-2 gap-2">
-    <div className="w-1/2">
-      <Select value={selectedOption} onValueChange={(val) => setSelectedOption(val)}>
-        <Select.Trigger className="w-full">
-          <Select.Value placeholder={`Select ${optionTitle ?? "Option"}`} />
-        </Select.Trigger>
-        <Select.Content>
-          {variantsWithSingleOption.map(({ value }) => (
-            <Select.Item key={value} value={value!}>
-              {value}
-            </Select.Item>
-          ))}
-        </Select.Content>
-      </Select>
-    </div>
-
-    <div className="w-1/2">
-    <Button
-  onClick={(e) => {
-    e.preventDefault()
-    e.stopPropagation()
-    if (selectedVariant && !isSelectedVariantInCart) {
-      handleToggleVariantInCart(selectedVariant)
-    }
-  }}
-  disabled={!selectedVariant || !selectedInStock}
-  isLoading={isAdding}
-  variant={isSelectedVariantInCart ? "secondary" : "primary"}
-  className={`flex items-center justify-center gap-2 ${
-    isSelectedVariantInCart ? "bg-red-500 text-white hover:bg-red-500" : ""
-  }`}
->
-  <FontAwesomeIcon icon={faShoppingCart} className="w-4 h-4" />
-  <span>
-    {isSelectedVariantInCart
-      ? `x${localQuantities[selectedVariant.id] ?? selectedVariantQuantity}`
-      : "Add"}
-  </span>
-</Button>
-
-</div>
-
-  </div>
-)}
 
       </div>
     </LocalizedClientLink>

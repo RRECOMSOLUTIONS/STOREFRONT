@@ -5,7 +5,7 @@ import { Popover, PopoverPanel, Transition } from "@headlessui/react"
 import { XMark } from "@medusajs/icons"
 import { listProducts } from "@lib/data/products"
 import { fetchProductsForSearch } from "@lib/data/fetchProducts"
-import ProductPreview from "@modules/products/components/product-preview"
+import ProductPreviewSearch from "@modules/products/components/product-preview-search"
 import { StoreProduct, StoreRegion } from "@medusajs/types"
 import { FaSearch } from "react-icons/fa"
 
@@ -77,7 +77,7 @@ useEffect(() => {
 <div className="grid grid-cols-2 gap-4 max-h-[400px] overflow-y-auto custom-scrollbar">
                 {products.length > 0 ? (
                     products.map((product) => (
-                      <ProductPreview
+                      <ProductPreviewSearch
                         key={product.id}
                         product={product}
                         region={region}
