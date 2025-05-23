@@ -1,3 +1,5 @@
+export const dynamic = "force-dynamic";
+
 import { Metadata } from "next"
 import { notFound } from "next/navigation"
 
@@ -59,7 +61,7 @@ export async function generateMetadata(props: Props): Promise<Metadata> {
   }
 
   const metadata = {
-    title: `${collection.title} | Medusa Store`,
+    title: `${collection.title} | RRECOM Solutions Store`,
     description: `${collection.title} collection`,
   } as Metadata
 

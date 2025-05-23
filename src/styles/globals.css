@@ -110,3 +110,44 @@
     @apply text-[32px] leading-[44px] font-semibold;
   }
 }
+
+/* globals.css */
+
+.custom-scrollbar::-webkit-scrollbar {
+  width: 8px;
+}
+
+.custom-scrollbar::-webkit-scrollbar-track {
+  background: #1f2937; /* dark gray */
+}
+
+.custom-scrollbar::-webkit-scrollbar-thumb {
+  background-color: #fe486d;
+  border-radius: 9999px;
+}
+
+/* For Firefox */
+.custom-scrollbar {
+  scrollbar-width: thin;
+  scrollbar-color: #fe486d #090909;
+}
+
+
+@font-face {
+  font-family: "Twentieth Century";
+  src: url("https://db.onlinewebfonts.com/t/6138beb83221f6eb46ed08543a304d1d.eot");
+  src: url("https://db.onlinewebfonts.com/t/6138beb83221f6eb46ed08543a304d1d.eot?#iefix")format("embedded-opentype"),
+  url("https://db.onlinewebfonts.com/t/6138beb83221f6eb46ed08543a304d1d.woff2")format("woff2"),
+  url("https://db.onlinewebfonts.com/t/6138beb83221f6eb46ed08543a304d1d.woff")format("woff"),
+  url("https://db.onlinewebfonts.com/t/6138beb83221f6eb46ed08543a304d1d.ttf")format("truetype"),
+  url("https://db.onlinewebfonts.com/t/6138beb83221f6eb46ed08543a304d1d.svg#Twentieth Century")format("svg");
+}
+
+.font-twentieth-century {
+  font-family: "Twentieth Century";
+}
+
+body {
+  @apply font-twentieth-century;
+}
+

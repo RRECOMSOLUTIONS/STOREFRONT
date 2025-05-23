@@ -14,19 +14,38 @@ export const metadata: Metadata = {
 }
 
 export default async function PageLayout(props: { children: React.ReactNode }) {
-  const customer = await retrieveCustomer()
-  const cart = await retrieveCart()
+  let customer = null
+  let cart = null
   let shippingOptions: StoreCartShippingOption[] = []
 
-  if (cart) {
-    const { shipping_options } = await listCartOptions()
+  const countryCode = process.env.NEXT_PUBLIC_DEFAULT_REGION || "dk"
 
-    shippingOptions = shipping_options
+  try {
+    customer = await retrieveCustomer()
+  } catch (error) {
+    console.error("Error retrieving customer:", error)
+  }
+
+  try {
+    cart = await retrieveCart()
+  } catch (error) {
+    console.error("Error retrieving cart:", error)
+  }
+
+  if (cart) {
+    try {
+      const { shipping_options } = await listCartOptions()
+
+      console.log("Shipping options:", shipping_options)
+      shippingOptions = shipping_options
+    } catch (error) {
+      console.error("Error retrieving shipping options:", error)
+    }
   }
 
   return (
     <>
-      <Nav />
+      <Nav params={{ countryCode }} />
       {customer && cart && (
         <CartMismatchBanner customer={customer} cart={cart} />
       )}
