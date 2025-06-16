@@ -45,6 +45,7 @@ const nextConfig = {
         hostname: "hocrwggrlcoorzzfiqtz.supabase.co", // ✅ Add this
       },
     ],
+    unoptimized: true,
   },
 }
 
